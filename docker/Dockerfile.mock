@@ -1,0 +1,20 @@
+# Dockerfile para Mock Service (JSON Server)
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copiar arquivos de configuração
+COPY mock-service/package*.json ./
+
+# Instalar dependências
+RUN npm ci --only=production
+
+# Copiar código fonte
+COPY mock-service/ .
+
+# Expor porta 3001
+EXPOSE 3001
+
+# Comando para iniciar o serviço
+CMD ["npm", "start"]
+

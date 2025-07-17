@@ -1,0 +1,42 @@
+# Dockerfile para API .NET 8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 5000
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copiar arquivos de projeto
+COPY ["api/src/SeguroVeiculos.API/SeguroVeiculos.API.csproj", "SeguroVeiculos.API/"]
+COPY ["api/src/SeguroVeiculos.Application/SeguroVeiculos.Application.csproj", "SeguroVeiculos.Application/"]
+COPY ["api/src/SeguroVeiculos.Domain/SeguroVeiculos.Domain.csproj", "SeguroVeiculos.Domain/"]
+COPY ["api/src/SeguroVeiculos.Infrastructure/SeguroVeiculos.Infrastructure.csproj", "SeguroVeiculos.Infrastructure/"]
+
+# Restaurar dependências
+RUN dotnet restore "SeguroVeiculos.API/SeguroVeiculos.API.csproj"
+
+# Copiar código fonte
+COPY api/src/ .
+
+# Build da aplicação
+WORKDIR "/src/SeguroVeiculos.API"
+RUN dotnet build "SeguroVeiculos.API.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "SeguroVeiculos.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Criar diretório para banco de dados SQLite
+RUN mkdir -p /app/data
+
+# Configurar variáveis de ambiente
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:5000
+ENV ConnectionStrings__DefaultConnection="Data Source=/app/data/seguro_veiculos.db"
+ENV SeguradorService__BaseUrl="http://mock-service:3001"
+
+ENTRYPOINT ["dotnet", "SeguroVeiculos.API.dll"]
+

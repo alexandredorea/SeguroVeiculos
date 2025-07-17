@@ -1,0 +1,67 @@
+# Arquivos e diretórios a serem ignorados pelo Docker
+
+# Git
+.git
+.gitignore
+
+# Documentação
+README.md
+docs/
+*.md
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+*.exe
+
+# Frontend build
+frontend/seguro-veiculos-frontend/dist/
+frontend/seguro-veiculos-frontend/node_modules/
+
+# Banco de dados local
+*.db
+*.sqlite
+
+# Arquivos de ambiente local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Coverage reports
+coverage/
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+

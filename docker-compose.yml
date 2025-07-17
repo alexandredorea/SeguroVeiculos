@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # API .NET 8.0
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: seguro-veiculos-api
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/seguro_veiculos.db
+      - SeguradorService__BaseUrl=http://mock-service:3001
+    volumes:
+      - api_data:/app/data
+    depends_on:
+      - mock-service
+    networks:
+      - seguro-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Vue.js
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: seguro-veiculos-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - seguro-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Mock Service (JSON Server)
+  mock-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.mock
+    container_name: seguro-veiculos-mock
+    ports:
+      - "3001:3001"
+    networks:
+      - seguro-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/segurados"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  api_data:
+    driver: local
+
+networks:
+  seguro-network:
+    driver: bridge
+
