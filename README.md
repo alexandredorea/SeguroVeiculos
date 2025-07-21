@@ -486,31 +486,6 @@ curl http://localhost:3001/segurados
 - **Frontend**: First Contentful Paint < 1.5s
 - **Mock Service**: Tempo de resposta < 50ms
 
-## 🤝 Contribuição
-
-### Como Contribuir
-
-1. **Fork** o projeto
-2. **Crie** uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** para a branch (`git push origin feature/AmazingFeature`)
-5. **Abra** um Pull Request
-
-### Padrões de Código
-
-- **C#**: Seguir convenções do .NET e princípios SOLID
-- **TypeScript/Vue**: Seguir guia de estilo do Vue.js
-- **Commits**: Usar Conventional Commits
-- **Testes**: Manter cobertura > 80%
-
-### Reportar Bugs
-
-Use as [Issues do GitHub](link-para-issues) para reportar bugs, incluindo:
-- Descrição detalhada do problema
-- Passos para reproduzir
-- Ambiente (OS, Docker version, etc.)
-- Logs relevantes
-
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
